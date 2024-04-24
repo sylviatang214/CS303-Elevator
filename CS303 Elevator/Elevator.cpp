@@ -34,6 +34,20 @@ void elevator::push_front(int floor) {
 	}
 }
 
+void elevator::push_back(int floor) {
+	node* backNode = new node;
+	backNode->floor = floor;
+
+	if (headPtr == nullptr) { //if list is empty, set headptr and tailptr as backNode 
+		headPtr = backNode;
+		tailPtr = backNode;
+	}
+	else { // push to back
+		tailPtr->next = backNode;
+		tailPtr = backNode;
+	}
+}
+
 void elevator::insert(int input, int floor) {
 
 	if (empty() || input == 0) {
@@ -59,26 +73,33 @@ void elevator::insert(int input, int floor) {
 		node* nextPtr;
 
 		//move tempNode to position input
-		for (int i = 1; i < input; i++) {
+		for (int i = 0; i < input; i++) {
 			tempPtr = tempPtr->next;
+			if (tempPtr == nullptr)
+				break;
 		}
 
-		//assign floor to insertNode
-		insertNode->floor = floor;
+		if (tempPtr == nullptr) {
+			push_back(floor);
+		}
+		else {
+			//assign floor to insertNode
+			insertNode->floor = floor;
 
-		nextPtr = tempPtr;        //assign tempNode position to nextNode
-		prevPtr = tempPtr->prev;  //point prevNode to tempNode
+			nextPtr = tempPtr;        //assign tempNode position to nextNode
+			prevPtr = tempPtr->prev;  //point prevNode to tempNode
 
-		//put insertNode between next and prev nodes
-		insertNode->next = nextPtr;
-		insertNode->prev = prevPtr;
-		//insertNode = tempPtr;
-		//insertNode->prev = tempPtr->prev;
-		//insertNode->next = tempPtr->next;
+			//put insertNode between next and prev nodes
+			insertNode->next = nextPtr;
+			insertNode->prev = prevPtr;
+			//insertNode = tempPtr;
+			//insertNode->prev = tempPtr->prev;
+			//insertNode->next = tempPtr->next;
 
-		//change prev and next node to point to insert node
-		prevPtr->next = insertNode;
-		nextPtr->prev = insertNode;
+			//change prev and next node to point to insert node
+			prevPtr->next = insertNode;
+			nextPtr->prev = insertNode;
+		}
 
 	}
 
